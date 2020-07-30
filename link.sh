@@ -8,8 +8,7 @@ backup(){
 	local FILE_PATH="$(dirname "$1")"
 	local FILE_NAME="$(basename "$1")"
 	# Check if file is a link, remove if it is else backup file
-	echo "Backing up $2"
-	cp "$1" "${FILE_PATH}/${FILE_NAME}.bk"
+	[[ -L "$1" ]] || { echo "Backing up $2"; cp "$1" "${FILE_PATH}/${FILE_NAME}.bk"; }
 	rm "$1"
 }
 
@@ -26,10 +25,8 @@ link(){
 	ln -s "$1" "$2"
 }
 
-link "${DIR}/vim/vimrc" 	"${HOME}/.vimrc"
+link "${DIR}/vim/vimrc"				"${HOME}/.vimrc"
 link "${DIR}/tmux/tmux.conf" 	"${HOME}/.tmux.conf"
 link "${DIR}/git/gitconfig" 	"${HOME}/.gitconfig"
-link "${DIR}/zsh/zshrc" 	"${HOME}/.zshrc"
-link "${DIR}/zsh/p10k.zsh" 	"${HOME}/.p10k.zsh"
-
-
+link "${DIR}/zsh/zshrc"				"${HOME}/.zshrc"
+link "${DIR}/zsh/p10k.zsh"		"${HOME}/.p10k.zsh"
