@@ -104,14 +104,14 @@ set winminheight=0             " Allow windows to be squashed.
 
 
 " Hardcode arrow keys mode
-noremap <Up> ""
-noremap! <Up> <Esc>
-noremap <Down> ""
-noremap! <Down> <Esc>
-noremap <Left> ""
-noremap! <Left> <Esc>
-noremap <Right> ""
-noremap! <Right> <Esc>"
+"noremap <Up> ""
+"noremap! <Up> <Esc>
+"noremap <Down> ""
+"noremap! <Down> <Esc>
+"noremap <Left> ""
+"noremap! <Left> <Esc>
+"noremap <Right> ""
+"noremap! <Right> <Esc>"
 
 " Vim-indent-guides
 let g:indent_guides_start_level = 2
@@ -134,16 +134,11 @@ Plug 'nathanaelkane/vim-indent-guides'
 " Syntax checking
 Plug 'scrooloose/syntastic'
 
-" CoffeeScript support
-Plug 'kchmck/vim-coffee-script'
-
 " Git tools
 Plug 'tpope/vim-fugitive'
 
 " Colour Schemes
 Plug 'tomasr/molokai'
-" Syntax hilighting
-Plug 'elixir-lang/vim-elixir'
 
 call plug#end()
 

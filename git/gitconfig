@@ -5,8 +5,7 @@
 	name = Sherman Rose
 	email = sherman@shermanrose.uk
 [alias]
-  hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-	testa = log
+	hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 [color]
 	ui = true
 [difftool "sourcetree"]
@@ -18,7 +17,11 @@
 [commit]
 	template = /Users/sherman/.stCommitMsg
 [filter "lfs"]
+
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+
+[init]
+	defaultBranch = main
