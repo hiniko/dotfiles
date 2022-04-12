@@ -121,7 +121,7 @@ let g:indent_guides_size = 2
 call plug#begin('~/.vim/plugged')
 
 " Filesystem 
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 
 " Buffer tools
@@ -130,6 +130,9 @@ Plug 'tpope/vim-sleuth'
 " Beauty tools
 Plug 'bling/vim-airline'
 Plug 'nathanaelkane/vim-indent-guides'
+
+" Syntax supoort
+Plug 'hashivim/vim-terraform'
 
 " Syntax checking
 Plug 'scrooloose/syntastic'
