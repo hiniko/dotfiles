@@ -3,9 +3,14 @@
 	excludesfile = /Users/sherman/.gitignore_global
 [user]
 	name = Sherman Rose
-	email = sherman@shermanrose.uk
+	email = shermanrose@improbable.io
 [alias]
 	hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	nb = "!f() { git switch -c \"$1\";}; f"
+	sr = !git reset --soft HEAD^1
+	hr = !git reset --hard HEAD^1
+	up = !git push -u origin HEAD
+	c = "!f() { [ -n \"$1\" ] && { echo \"no commit message\"; return 1; }; git commit -m \"$1\";}; f;"
 [color]
 	ui = true
 [difftool "sourcetree"]
@@ -25,3 +30,8 @@
 
 [init]
 	defaultBranch = main
+[pull]
+	rebase = true
+	twohead = ort
+[url "ssh://org-32199913@github.com/improbable"]
+	insteadOf = https://github.com/improbable

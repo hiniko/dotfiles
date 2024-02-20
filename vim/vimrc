@@ -102,6 +102,8 @@ set wildmenu                   " Enable enhanced command-line
 
 set winminheight=0             " Allow windows to be squashed.
 
+set nofixendofline             " Disable adding EOL to files
+
 
 " Hardcode arrow keys mode
 "noremap <Up> ""
