@@ -67,125 +67,47 @@ HIST_STAMPS="dd/mm/yyyy"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git fzf-zsh-plugin colored-man-pages ssh-agent macos zsh-syntax-highlighting asdf)
 
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
+export LANG=en_GB.UTF-8
 export MANPATH="/usr/local/man:$MANPATH"
-export EDITOR="vim"
+export EDITOR="nvim"
 export GOPATH="${HOME}/go"
 
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
 alias edit_zshconfig="$EDITOR ~/.zshrc"
 alias edit_ohmyzsh="$EDITOR ~/.oh-my-zsh"
+alias vim='nvim'
 
-
-# SSH Agent configuration
-zstyle :omz:plugins:ssh-agent agent-forwarding on
-zstyle :omz:plugins:ssh-agent identities id_rsa id_ed25519 hiniko_github
-zstyle :omz:plugins:ssh-agent lifetime 4h
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-source /opt/homebrew/opt/powerlevel10k/share/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
+export FZF_DEFAULT_OPTS="--layout=reverse --info=inline --height=80% --multi --preview='([[ -f {} ]] && (bat --style=numbers --color=always {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2>/dev/null | head -n 200' --preview-window=':hidden' --color='hl:148,hl+:154,pointer:032,marker:010,bg+:237,gutter:008' --prompt='∼ ' --pointer='▶' --marker='✓' --bind '?:toggle-preview' --bind 'ctrl-a:select-all' --bind 'ctrl-e:execute(vim {+} >/dev/tty)' --bind 'ctrl-v:execute(code {+})' --bind 'ctrl-y:execute-silent(echo {+} | pbcopy)'"
 
 # Setup dir env
 eval "$(direnv hook zsh)"
 
-# Setup Pyenv
-export PATH="${HOME}/.pyenv/bin:${PATH}"
-eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
+zshrc_path="${HOME}/.dotfiles/zsh/"
 
-# add bins to path 
-export PATH="${HOME}/go/bin:${HOME}/flutter/bin:$PATH"
-# add android studio bins to path
-export PATH="${HOME}/Library/Android/sdk/cmdline-tools/latest/bin:$PATH"
-# Add dart bins to path
-export PATH="$PATH:$HOME/.pub-cache/bin"
+HOST="$(hostname)"
 
+# Common includes
+source "${zshrc_path}/aliases/docker.zsh"
+source "${zshrc_path}/aliases/git.zsh"
+source "${zshrc_path}/aliases/macos.zsh"
+source "${zshrc_path}/aliases/p10k.zsh"
+source "${zshrc_path}/settings/ssh-agent.zsh"
 
-export FZF_DEFAULT_OPTS="--layout=reverse --info=inline --height=80% --multi --preview='([[ -f {} ]] && (bat --style=numbers --color=always {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2>/dev/null | head -n 200' --preview-window=':hidden' --color='hl:148,hl+:154,pointer:032,marker:010,bg+:237,gutter:008' --prompt='∼ ' --pointer='▶' --marker='✓' --bind '?:toggle-preview' --bind 'ctrl-a:select-all' --bind 'ctrl-e:execute(vim {+} >/dev/tty)' --bind 'ctrl-v:execute(code {+})' --bind 'ctrl-y:execute-silent(echo {+} | pbcopy)'"
-
-
-docker-cleanup () { docker rm -f $(docker ps -a -q); }
-
-# VS code open function
-code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
-
-toolstrap () { imp-tool sync state && imp-tool sync contents ; }
-
-# Nice netstat function
-macnst (){
-    netstat -Watnlv | grep LISTEN | awk '{"ps -o comm= -p " $9 | getline procname;colred="\033[01;31m";colclr="\033[0m"; print colred "proto: " colclr $1 colred " | addr.port: " colclr $4 colred " | pid: " colclr $9 colred " | name: " colclr procname;  }' | column -t -s "|";
-}
-
-x86-shell () { arch -x86_64 /bin/zsh ; }
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/shermanrose/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shermanrose/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/shermanrose/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shermanrose/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/shermanrose/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/shermanrose/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/shermanrose/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/shermanrose/anaconda3/bin:$PATH"
-    fi
+# Personal Includes
+if [[ "$hostname" == "saki.local" ]]; then
+    
 fi
-unset __conda_setup
-# <<< conda initialize <<<
 
-# NVM Setup
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-alias gam="/Users/shermanrose/bin/gam/gam"
-
-alias yeet='yeeet() {
-    selected_files=($(git status -s | fzf --multi --ansi | awk "{print \$2}" | tr "\n" "\0" | xargs -0))
-
-    if [ -z "$selected_files" ]; then
-        echo "No files selected."
-    else
-        echo -n "Enter commit message: "
-        read commit_message
-        if [ -z "$commit_message" ]; then
-            echo "Commit message cannot be empty."
-        else
-            for file in $selected_files; do
-                git add "$file"
-            done
-            git commit -m "$commit_message" && \
-            git push -u origin HEAD
-        fi
-    fi
-}; yeeet'
+# Work includes
+if [[ "$hostname" == "shermanrose-mac-xh4fnh2g7y.corp.improbable.io" ]]; then
+    source "${zshrc_path}/aliases/flutter.zsh"
+    source "${zshrc_path}/aliases/gam.zsh"
+    source "${zshrc_path}/aliases/gcloud.zsh"
+    source "${zshrc_path}/aliases/nvm.zsh"
+fi

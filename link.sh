@@ -25,8 +25,11 @@ link(){
 	ln -s "$1" "$2"
 }
 
-link "${DIR}/vim/vimrc"       "${HOME}/.vimrc"
-link "${DIR}/tmux/tmux.conf"  "${HOME}/.tmux.conf"
-link "${DIR}/git/gitconfig" 	"${HOME}/.gitconfig"
-link "${DIR}/zsh/zshrc"       "${HOME}/.zshrc"
-link "${DIR}/zsh/p10k.zsh"	  "${HOME}/.p10k.zsh"
+mkdir -p "${HOME}/.config/"
+
+link "${DIR}/nvim/" 			"${HOME}/.config/nvim"
+link "${DIR}/vim/vimrc" 		"${HOME}/.vimrc"
+link "${DIR}/tmux/tmux.conf"  	"${HOME}/.tmux.conf"
+link "${DIR}/git/gitconfig"   	"${HOME}/.gitconfig"
+link "${DIR}/zsh/zshrc"       	"${HOME}/.zshrc"
+link "${DIR}/zsh/p10k.zsh" 		"${HOME}/.p10k.zsh"
