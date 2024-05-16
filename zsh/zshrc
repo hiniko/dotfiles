@@ -78,6 +78,9 @@ export MANPATH="/usr/local/man:$MANPATH"
 export EDITOR="nvim"
 export GOPATH="${HOME}/go"
 
+# Add local gopath bin to path
+export PATH=$GOPATH/bin:$PATH
+
 
 alias edit_zshconfig="$EDITOR ~/.zshrc"
 alias edit_ohmyzsh="$EDITOR ~/.oh-my-zsh"
@@ -87,6 +90,9 @@ export FZF_DEFAULT_OPTS="--layout=reverse --info=inline --height=80% --multi --p
 
 # Setup dir env
 eval "$(direnv hook zsh)"
+
+# Setup FZF keybindings
+eval "$(fzf --zsh)"
 
 zshrc_path="${HOME}/.dotfiles/zsh/"
 

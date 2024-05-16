@@ -1,5 +1,9 @@
 -- change the tab width to 4
 vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+
+-- enable system clipboard use for yanks
+ vim.api.nvim_set_option("clipboard", "unnamedplus")
 
 -- enable the sign column
 vim.opt.signcolumn = "yes"
@@ -21,3 +25,7 @@ vim.opt.listchars = {
     nbsp = "␣",
 	eol = "↲",
 }
+
+vim.opt.cursorline = true
+vim.opt.cursorcolumn = true
+

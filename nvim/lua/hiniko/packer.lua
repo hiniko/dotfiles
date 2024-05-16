@@ -76,13 +76,19 @@ return require('packer').startup(function(use)
 	-- GuessIndent - Because everyone has to do it differntly
 	use { "nmac427/guess-indent.nvim" }
 
-	-- DAP - Debug Adapter Protocol
-	 use { 'mfussenegger/nvim-dap' }
+	-- Golang tooling https://github.com/ray-x/go.nvim	
+	use 'ray-x/go.nvim'
+	use 'ray-x/guihua.lua' -- recommended if need floating window support
+	use 'neovim/nvim-lspconfig'
+	-- already have this
+	-- use 'nvim-treesitter/nvim-treesitter'
+	use  'mfussenegger/nvim-dap'
+    use 'rcarriga/nvim-dap-ui'
+    use 'nvim-neotest/nvim-nio'
+    use 'theHamsta/nvim-dap-virtual-text'
+    use 'nvim-telescope/telescope-dap.nvim'
 
-	-- Go DAP 
-	use { 'leoluz/nvim-dap-go' }
-
-
-
+	-- Session manager
+	use "Shatur/neovim-session-manager"
 
 end)

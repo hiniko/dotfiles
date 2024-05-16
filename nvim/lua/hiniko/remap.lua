@@ -1,12 +1,13 @@
 vim.g.mapleader = " "
 
+-- Better block movement
 vim.keymap.set("n", "<C-J>", "{")
 vim.keymap.set("n", "<C-K>", "}")
 
 
+-- Resource the lua config
+vim.keymap.set("n","<leader>qq", ":luafile $MYVIMRC<CR>")
 
--- split windows creating a terminal buffer that is already in insert modei
-vim.keymap.set("n", "<leader>sh", "o<C-w>sp:term<CR>i")
 
 -- Show the active mappings in a new buffer
 function ShowMappings()
