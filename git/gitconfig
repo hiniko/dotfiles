@@ -22,3 +22,6 @@
 [pull]
 	rebase = true
 	twohead = ort
+[user]
+	email = sherman@catches.ai
+	name = Sherman Rose
