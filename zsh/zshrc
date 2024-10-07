@@ -1,18 +1,9 @@
-#Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Uncomment the following line to use case-sensitive completion.
-#CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -21,120 +12,47 @@ HYPHEN_INSENSITIVE="true"
 # Uncomment one of the following lines to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
 zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
 # Uncomment the following line to change how often to auto-update (in days).
 zstyle ':omz:update' frequency 13
 
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+ENABLE_CORRECTION="false"
 COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
 HIST_STAMPS="dd/mm/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-vi-mode git fzf-zsh-plugin colored-man-pages ssh-agent macos zsh-syntax-highlighting asdf)
-
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
+plugins=(git fzf-zsh-plugin colored-man-pages ssh-agent macos zsh-syntax-highlighting)
 
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
+# User configuratio
 export LANG=en_GB.UTF-8
 export MANPATH="/usr/local/man:$MANPATH"
 export EDITOR="nvim"
-export GOPATH="${HOME}/go"
+export HOST="$(hostname)"
+export DOTFILES_PATH="${HOME}/.dotfiles/"
+export DOTFILES_FZF_PATH="${DOTFILES_PATH}/zsh"
 
-# Add local gopath bin to path
-export PATH=$GOPATH/bin:$PATH
+# SSH agent needs to happen bfore OMZ is sourced
+source "${DOTFILES_FZF_PATH}/settings/ssh-agent.zsh"
 
+# OH MY ZSH
+source $ZSH/oh-my-zsh.sh
 
-alias edit_zshconfig="$EDITOR ~/.zshrc"
-alias edit_ohmyzsh="$EDITOR ~/.oh-my-zsh"
-alias vim='nvim'
-
+# FZF config
 export FZF_DEFAULT_OPTS="--layout=reverse --info=inline --height=80% --multi --preview='([[ -f {} ]] && (bat --style=numbers --color=always {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2>/dev/null | head -n 200' --preview-window=':hidden' --color='hl:148,hl+:154,pointer:032,marker:010,bg+:237,gutter:008' --prompt='∼ ' --pointer='▶' --marker='✓' --bind '?:toggle-preview' --bind 'ctrl-a:select-all' --bind 'ctrl-e:execute(vim {+} >/dev/tty)' --bind 'ctrl-v:execute(code {+})' --bind 'ctrl-y:execute-silent(echo {+} | pbcopy)'"
 
+# Path Configuraiton
+source "${DOTFILES_FZF_PATH}/settings/path.zsh"
 
-zshrc_path="${HOME}/.dotfiles/zsh/"
+# FZF settings 
+source "${DOTFILES_FZF_PATH}/settings/fzf.zsh"
 
-HOST="$(hostname)"
+# Common aliases 
+source "${DOTFILES_FZF_PATH}/aliases/docker.zsh"
+source "${DOTFILES_FZF_PATH}/aliases/editor.zsh"
+source "${DOTFILES_FZF_PATH}/aliases/zsh-meta.zsh"
+source "${DOTFILES_FZF_PATH}/aliases/git.zsh"
+source "${DOTFILES_FZF_PATH}/aliases/macos.zsh"
+source "${DOTFILES_FZF_PATH}/aliases/p10k.zsh"
+source "${DOTFILES_FZF_PATH}/aliases/gcloud.zsh"
+source "${DOTFILES_FZF_PATH}/aliases/direnv.zsh"
 
-# Common includes
-source "${zshrc_path}/aliases/docker.zsh"
-source "${zshrc_path}/aliases/git.zsh"
-source "${zshrc_path}/aliases/macos.zsh"
-source "${zshrc_path}/aliases/p10k.zsh"
-source "${zshrc_path}/settings/ssh-agent.zsh"
-
-export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin"
-export FZF_DEFAULT_OPTS="--layout=reverse --info=inline --height=80% --multi --preview='([[ -f {} ]] && (bat --style=numbers --color=always {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2>/dev/null | head -n 200' --preview-window=':hidden' --color='hl:148,hl+:154,pointer:032,marker:010,bg+:237,gutter:008' --prompt='∼ ' --pointer='▶' --marker='✓' --bind '?:toggle-preview' --bind 'ctrl-a:select-all' --bind 'ctrl-e:execute(vim {+} >/dev/tty)' --bind 'ctrl-v:execute(code {+})' --bind 'ctrl-y:execute-silent(echo {+} | pbcopy)'"
-
-# Personal Includes
-if [[ "$hostname" == "saki.local" ]]; then
-    
-fi
-
-# Work includes
-if [[ "$hostname" == "shermanrose-mac-xh4fnh2g7y.corp.improbable.io" ]]; then
-    source "${zshrc_path}/aliases/gcloud.zsh"
-fi
-
-alias yeet='yeeet() {
-    selected_files=($(git status -s | fzf --multi --ansi | awk "{print \$2}" | tr "\n" "\0" | xargs -0))
-
-    if [ -z "$selected_files" ]; then
-        echo "No files selected."
-    else
-        echo -n "Enter commit message: "
-        read commit_message
-        if [ -z "$commit_message" ]; then
-            echo "Commit message cannot be empty."
-        else
-            for file in $selected_files; do
-                git add "$file"
-            done
-            git commit -m "$commit_message" && \
-            git push -u origin HEAD
-        fi
-    fi
-}; yeeet'
-
-# Setup dir env
-eval "$(direnv hook zsh)"
-
-# Setup FZF keybindings
-eval "$(fzf --zsh)"

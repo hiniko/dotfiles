@@ -2,3 +2,5 @@
 source "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
 source ~/.p10k.zsh
+
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
