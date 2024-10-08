@@ -25,9 +25,8 @@ It can currently setup:
             * `git up` push to remote head ( useful to creating remote branches and syncing)
 * `neovim`
     * IDE level config with LSP support 
-    * currently needs install scripts for plugins to work OOTB
-* `vim`
-    * Older `vim` config with themes, and some plugins
-    * also needs an install script for plugins to work
+    * Has autoamted packet setup and hash based plugin installation for a good OOTB 
+        * Shoudl be able to run nvim and everything just work on first / second run 
+
 *  `fzf` fuzzy finder TUI config
     * needed because the brew install has default keybindings in a dir that the base config doesn't expect. These are handled by the `zsh` config anyway so it isn't a problem
