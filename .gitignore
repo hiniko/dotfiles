@@ -1,2 +1,4 @@
 *.swo
 *.swp
+
+nvim/plugin_hash.txt

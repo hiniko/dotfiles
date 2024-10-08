@@ -1,7 +1,75 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
+local current_file = debug.getinfo(1, "S").source:sub(2)
 
--- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
+local fn = vim.fn
+
+-- Automatically install packer
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  print("Installing packer close and reopen Neovim...")
+  PACKER_BOOTSTRAP = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+end
+
+-- Autocommand that reloads neovim whenever you save the plugins.lua file
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+  augroup end
+]])
+
+-- Use a protected call so we don't error out on first use
+local status_ok, packer = pcall(require, "packer")
+if not status_ok then
+	print("failed to call packer")
+  return
+end
+
+local function get_file_hash(file_path)
+	local file = io.open(file_path, "rb")  -- Read file in binary mode
+	if not file then
+	  return nil
+	end
+	local content = file:read("*all")      -- Read the entire file
+	file:close()
+  
+	return vim.fn.sha256(content)          -- Return the hash of the file content
+  end
+  
+  local function get_stored_hash(hash_file)
+	local file = io.open(hash_file, "r")
+	if not file then
+	  return nil
+	end
+	local stored_hash = file:read("*all")
+	file:close()
+  
+	return stored_hash
+  end
+  
+  local function store_hash(hash_file, hash)
+	local file = io.open(hash_file, "w")
+	if file then
+	  file:write(hash)
+	  file:close()
+	end
+  end
+  
+  local function sync_if_needed(plugin_file)
+	local hash_file = vim.fn.stdpath('config') .. '/plugin_hash.txt'
+	local current_hash = get_file_hash(plugin_file)
+	local stored_hash = get_stored_hash(hash_file)
+
+	if current_hash and current_hash ~= stored_hash then
+	  -- Hash has changed, sync plugins and update the hash file
+	  print("Plugin definitions have changed, running packer.sync()...")
+	  require('packer').sync()
+	  store_hash(hash_file, current_hash)
+	else
+	  print("No changes in plugin definitions.")
+	end
+  end
+  
+
 
 return require('packer').startup(function(use)
 	-- Packer can manage itself
@@ -88,7 +156,6 @@ return require('packer').startup(function(use)
     use 'theHamsta/nvim-dap-virtual-text'
     use 'nvim-telescope/telescope-dap.nvim'
 
-	-- Session manager
-	use "Shatur/neovim-session-manager"
+  	sync_if_needed(current_file)
 
 end)
