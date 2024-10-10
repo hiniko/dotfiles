@@ -23,13 +23,19 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 plugins=(git fzf-zsh-plugin colored-man-pages ssh-agent macos zsh-syntax-highlighting)
 
-# User configuratio
+# User configuration
 export LANG=en_GB.UTF-8
 export MANPATH="/usr/local/man:$MANPATH"
 export EDITOR="nvim"
 export HOST="$(hostname)"
 export DOTFILES_PATH="${HOME}/.dotfiles/"
 export DOTFILES_FZF_PATH="${DOTFILES_PATH}/zsh"
+
+## Early out for IntelliJ IDEs
+if [ ! -z "$INTELLIJ_ENVIRONMENT_READER" ]; then
+	echo "I am in IntelliJ, exiting before zsh setup"
+	return 
+fi
 
 # SSH agent needs to happen bfore OMZ is sourced
 source "${DOTFILES_FZF_PATH}/settings/ssh-agent.zsh"
