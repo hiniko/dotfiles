@@ -1,0 +1,6 @@
+# Vim swap files
+.swp
+.swo
+
+# macOS files
+.DS_Store

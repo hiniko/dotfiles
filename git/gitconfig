@@ -1,6 +1,7 @@
 [core]
 	editor = vim
-	excludesfile = /Users/sherman/.gitignore_global
+	excludesfile = ~/.dotfiles/git/global_ignore
+
 [alias]
 	hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	nb = "!f() { git switch -c \"sherman/$1\";}; f"
@@ -8,20 +9,30 @@
 	hr = !git reset --hard HEAD^1
 	up = !git push -u origin HEAD
 	c = "!f() { [ -n \"$1\" ] && { echo \"no commit message\"; return 1; }; git commit -m \"$1\";}; f;"
+
 [color]
 	ui = true
-[commit]
-	template = /Users/sherman/.stCommitMsg
+
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+
 [init]
 	defaultBranch = main
+
 [pull]
 	rebase = true
 	twohead = ort
-[user]
-	email = sherman@catches.ai
-	name = Sherman Rose
+
+# Force SSH on github.com
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+
+# Includes for work and personal git configs
+[includeIf "gitdir:~/Work/"]
+	path = ~/.dotfiles/git/work.gitconfig
+
+[includeIf "gitdir:~/Personal/"]
+	path = ~/.dotfiles/git/personal.gitconfig
