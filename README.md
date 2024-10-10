@@ -23,6 +23,11 @@ It can currently setup:
             * `git hr` hard reset to head
             * `git sr` soft reset to head
             * `git up` push to remote head ( useful to creating remote branches and syncing)
+    * Conditional Work / Personal Config
+        * Uses conditional includes of configs
+        * `work.gitconfig` is in effect in `~/Work` based repos
+        * `personal.gitconfig` is in effect in `~/Personal` based repos
+        * `global_ignore` is used everywhere for the pesky files
 * `neovim`
     * IDE level config with LSP support 
     * Has autoamted packet setup and hash based plugin installation for a good OOTB 
