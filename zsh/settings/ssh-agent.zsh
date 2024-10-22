@@ -2,4 +2,4 @@
 # SSH Agent configuration
 zstyle :omz:plugins:ssh-agent agent-forwarding off
 zstyle :omz:plugins:ssh-agent identities id_ed25519
-zstyle :omz:plugins:ssh-agent lifetime 4h
+zstyle :omz:plugins:ssh-agent lifetime 8h

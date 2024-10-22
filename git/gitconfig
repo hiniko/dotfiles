@@ -9,6 +9,8 @@
 	hr = !git reset --hard HEAD^1
 	up = !git push -u origin HEAD
 	c = "!f() { [ -n \"$1\" ] && { echo \"no commit message\"; return 1; }; git commit -m \"$1\";}; f;"
+	rc = "!f() { git add -u; git commit --amend --no-edit; }; f;"
+
 
 [color]
 	ui = true
@@ -26,9 +28,12 @@
 	rebase = true
 	twohead = ort
 
-# Force SSH on github.com
+# Force SSH
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+
+[url "git@github.com:CATCHES-1/"]
+	insteadOf = https://github.com/CATCHES-1/
 
 # Includes for work and personal git configs
 [includeIf "gitdir:~/Work/"]
