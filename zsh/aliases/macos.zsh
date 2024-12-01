@@ -5,3 +5,5 @@ macnst (){
 
 # Force x86 shell for Apple Silicone
 x86-shell () { arch -x86_64 /bin/zsh ; }
+
+uuid (){ uuidgen | tr '[:upper:]' '[:lower:]' | tr -d '\n' | pbcopy; }
