@@ -3,13 +3,22 @@
 	excludesfile = ~/.dotfiles/git/global_ignore
 
 [alias]
+	# History - Show a graph of commit history
 	hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-	nb = "!f() { git switch -c \"sherman/$1\";}; f"
+	# New Branch - create a new branch with the prefix "sherman/"
+	nb = "!f() { git switch -c \"sherman/$(echo \"$@\" | tr ' ' '-')\"; }; f"
+	# Soft reset to last commit
 	sr = !git reset --soft HEAD^1
+	# Hard reset to last commit
 	hr = !git reset --hard HEAD^1
+	# Push current branch to origin, creating if needed
 	up = !git push -u origin HEAD
+	# Commit with the given messsage
 	c = "!f() { [ -n \"$1\" ] && { echo \"no commit message\"; return 1; }; git commit -m \"$1\";}; f;"
+	# ReCommit - amend the last commit with the tracked files with changes
 	rc = "!f() { git add -u; git commit --amend --no-edit; }; f;"
+	# Commit amend
+	ca = "!git commit --amend;"
 
 
 [color]
