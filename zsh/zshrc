@@ -62,3 +62,5 @@ source "${DOTFILES_FZF_PATH}/aliases/p10k.zsh"
 source "${DOTFILES_FZF_PATH}/aliases/gcloud.zsh"
 source "${DOTFILES_FZF_PATH}/aliases/direnv.zsh"
 
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
