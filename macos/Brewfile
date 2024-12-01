@@ -1,0 +1,55 @@
+# Add new tap (repos)
+tap "homebrew/bundle"
+tap "homebrew/services"
+tap "mas-cli/tap"
+
+# Brew settings
+cask_args appdir: "~/Applications", require_sha: true
+
+# CLI Tools
+## Basics
+brew "bash"
+brew "coreutils"
+brew "gawk"
+brew "jq"
+brew "mtr"
+brew "ripgrep"
+brew "tree"
+brew "wget"
+brew "zsh"
+brew "httpie"
+brew "fzf"
+brew "neovim"
+## Developer Tools
+### Databases
+brew "postgresql@15"
+### General
+brew "direnv"
+brew "pre-commit"
+brew "hurl"
+cask "ngrok"
+### Github
+cask "github"
+brew "act"
+brew "gh"
+### Golang
+brew "go"
+brew "mockery"
+### Google
+brew "firebase-cli"
+cask "google-cloud-sdk"
+## JS/TS
+brew "node"
+### Shell
+brew "shellcheck"
+brew "shfmt"
+### Terraform
+brew "terraform"
+## Applications
+cask "spotify"
+
+## Applications
+mas "1Password", id: 443_987_910, greedy: true
+mas "WhatsApp", id: 24_23_80, greedy: true
+mas "Magnet", id: 2_14_0
+

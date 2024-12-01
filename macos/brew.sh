@@ -42,10 +42,5 @@ if is_not_installed "brew"; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-declare -a to_install=("${tools[@]}")
-if [[ $with_apps -eq 1 ]]; then 
-  to_install+=("${apps[@]}")
-fi
+brew bundle install
 
-# Install tools and apps with brew
-brew install "${to_install[@]}" 
