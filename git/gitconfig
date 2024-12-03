@@ -44,9 +44,10 @@
 [url "git@github.com:CATCHES-1/"]
 	insteadOf = https://github.com/CATCHES-1/
 
+[include]
+path = ~/.dotfiles/git/personal.gitconfig
+
 # Includes for work and personal git configs
 [includeIf "gitdir:~/Work/"]
 	path = ~/.dotfiles/git/work.gitconfig
 
-[includeIf "gitdir:~/Personal/"]
-	path = ~/.dotfiles/git/personal.gitconfig
