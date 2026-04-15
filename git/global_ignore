@@ -4,3 +4,15 @@
 
 # macOS files
 .DS_Store
+
+# Claude
+.claude/
+docs/superpowers
+
+# Cursor
+.cursorrules
+.cursor/
+
+# graprerootl.dev
+.dual-graph
+

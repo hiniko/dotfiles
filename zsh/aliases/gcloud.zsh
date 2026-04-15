@@ -1,5 +1,11 @@
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/shermanrose/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shermanrose/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+# Google Cloud SDK
+local gcloud_dir=""
+if [ -d "$HOME/google-cloud-sdk" ]; then
+    gcloud_dir="$HOME/google-cloud-sdk"
+elif [ -d "$HOME/Downloads/google-cloud-sdk" ]; then
+    gcloud_dir="$HOME/Downloads/google-cloud-sdk"
+fi
+[ -n "$gcloud_dir" ] || return 0
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/shermanrose/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shermanrose/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+[ -f "$gcloud_dir/path.zsh.inc" ] && source "$gcloud_dir/path.zsh.inc"
+[ -f "$gcloud_dir/completion.zsh.inc" ] && source "$gcloud_dir/completion.zsh.inc"

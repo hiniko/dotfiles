@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Claude Code Tmux Profile Launcher
+# Usage: claude-tmux [session-name]
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLAUDE_CONFIG="$SCRIPT_DIR/tmux-claude.conf"
+SESSION_NAME="${1:-claude-monitor}"
+
+# Check if tmux is installed
+if ! command -v tmux &> /dev/null; then
+    echo "Error: tmux is not installed"
+    exit 1
+fi
+
+# Check if config file exists
+if [ ! -f "$CLAUDE_CONFIG" ]; then
+    echo "Error: Claude tmux config not found at $CLAUDE_CONFIG"
+    exit 1
+fi
+
+# Function to show initial help message
+show_initial_help() {
+    # Display brief startup message using tmux display-message
+    tmux display-message "🤖 Claude Code ready! Press Prefix + h for help"
+}
+
+# Check if session already exists
+if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+    echo "Attaching to existing Claude session: $SESSION_NAME"
+    tmux attach-session -t "$SESSION_NAME"
+else
+    echo "Creating new Claude session: $SESSION_NAME"
+    
+    # Create new session with Claude config
+    tmux new-session -d -s "$SESSION_NAME" -x 120 -y 40
+    
+    # Load Claude configuration
+    tmux source-file "$CLAUDE_CONFIG"
+    
+    # Show initial help message
+    show_initial_help
+    
+    # Attach to the session
+    tmux attach-session -t "$SESSION_NAME"
+fi

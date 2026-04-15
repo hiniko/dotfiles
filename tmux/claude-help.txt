@@ -1,0 +1,24 @@
+🤖 Claude Code Tmux Key Bindings
+
+Pane Management:
+  Prefix + c   - Create new pane
+  Prefix + |   - Split window vertically
+  Prefix + -   - Split window horizontally
+  Prefix + m   - Move current pane to new window
+  Prefix + j   - Join pane from another window
+  Prefix + s   - Send pane to another window
+
+Layouts:
+  Prefix + C   - Create new window with 4-pane layout
+  Prefix + =   - Arrange panes in tiled layout
+  Prefix + g   - Arrange panes in grid layout
+
+Claude Actions:
+  Prefix + n   - Start Claude in current pane
+  Prefix + h   - Show this help
+
+Navigation:
+  Prefix + q   - Show pane numbers
+  Prefix + w   - Window selection with preview
+
+Ready to run: claude
