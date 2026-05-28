@@ -48,3 +48,6 @@ done
 # iTerm2 shell integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export PATH="$PATH:$HOME/.dual-graph"
+
+# Added by get-aspire-cli.sh
+export PATH="$HOME/.aspire/bin:$PATH"

@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# restish-sync <env>
+# Probe each api for /openapi/v{N}.json (N=1..5), rewrite spec_files in
+# ~/Library/Application Support/restish/apis.json, then run restish api sync.
+#
+# Envs: dev, dev-auth, prod, prod-auth, local
+# Prod uses dev spec URLs (specs not published on prod).
+
+set -euo pipefail
+
+ENV="${1:-}"
+if [[ -z "$ENV" ]]; then
+  echo "usage: restish-sync <dev|dev-auth|prod|prod-auth|local>" >&2
+  exit 1
+fi
+
+CONFIG="$HOME/Library/Application Support/restish/apis.json"
+MAX_VERSION=5
+
+# Spec source per env. Prod borrows dev. Auth envs target only auth-server.
+case "$ENV" in
+  dev|prod)
+    SPEC_BASE="https://swagger:oc_bUxhB4e@api.dev.catches.ai"
+    APIS=(assets notifications accounts renders ai-services measurements houdini python-ml coco-logic shopify)
+    ;;
+  dev-auth|prod-auth)
+    SPEC_BASE="https://swagger:oc_bUxhB4e@auth.dev.catches.ai"
+    APIS=(auth-server)
+    ;;
+  local)
+    SPEC_BASE="https://localhost:7076"
+    APIS=(assets notifications accounts renders ai-services measurements houdini python-ml coco-logic shopify)
+    ;;
+  *)
+    echo "unknown env: $ENV" >&2
+    exit 1
+    ;;
+esac
+
+echo "Probing spec versions for env=$ENV at $SPEC_BASE..."
+
+CURL_OPTS=(-fsSI -o /dev/null --max-time 5)
+[[ "$ENV" == "local" ]] && CURL_OPTS+=(-k)
+
+found=()
+for api in "${APIS[@]}"; do
+  for v in $(seq 1 "$MAX_VERSION"); do
+    url="${SPEC_BASE}/${api}-api/openapi/v${v}.json"
+    if curl "${CURL_OPTS[@]}" "$url"; then
+      echo "  found: ${api} v${v}"
+      found+=("$url")
+    fi
+  done
+done
+
+# Local auth-server lives on different port.
+if [[ "$ENV" == "local" ]]; then
+  for v in $(seq 1 "$MAX_VERSION"); do
+    url="https://localhost:57800/auth-server/openapi/v${v}.json"
+    if curl "${CURL_OPTS[@]}" "$url"; then
+      echo "  found: auth-server v${v}"
+      found+=("$url")
+    fi
+  done
+fi
+
+if [[ ${#found[@]} -eq 0 ]]; then
+  echo "No specs found. Aborting." >&2
+  exit 1
+fi
+
+# Write new spec_files array via jq.
+tmp="$(mktemp)"
+jq --arg env "$ENV" --argjson specs "$(printf '%s\n' "${found[@]}" | jq -R . | jq -s .)" \
+  '.[$env].spec_files = $specs' "$CONFIG" > "$tmp"
+mv "$tmp" "$CONFIG"
+
+echo "Updated $CONFIG with ${#found[@]} spec(s)."
+echo "Running: restish api sync $ENV"
+exec restish api sync "$ENV"

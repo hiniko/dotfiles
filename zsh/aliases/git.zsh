@@ -70,11 +70,12 @@ function _git_ca() {
 function _git_rebase() {
     local current_ref=$(command git rev-parse --abbrev-ref HEAD)
     local short_sha=$(command git rev-parse --short HEAD)
+    local timestamp=$(date +%Y%m%d%H%M%S)
     local backup_name
     if [[ "$current_ref" == "HEAD" ]]; then
-        backup_name="backup/${short_sha}"
+        backup_name="backup/${short_sha}-${timestamp}"
     else
-        backup_name="backup/${current_ref//\//-}-${short_sha}"
+        backup_name="backup/${current_ref//\//-}-${short_sha}-${timestamp}"
     fi
     command git branch "$backup_name" HEAD && \
     command git rebase "$@"
