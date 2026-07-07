@@ -26,15 +26,25 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="dd/mm/yyyy"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(colored-man-pages ssh-agent macos zsh-syntax-highlighting git fzf-zsh-plugin zsh-vi-mode)
+plugins=(
+	colored-man-pages 
+	fzf-zsh-plugin 
+	git 
+	macos 
+	ssh-agent 
+	zsh-syntax-highlighting 
+	zsh-vi-mode
+)
+
+# Homebrew must be configured before modules that depend on brew paths
+source "${DOTFILES_ZSH_PATH}/settings/homebrew.zsh"
 
 # SSH agent must be configured before OMZ is sourced
 source "${DOTFILES_ZSH_PATH}/settings/ssh-agent.zsh"
 
-source $ZSH/oh-my-zsh.sh
 
-# Source homebrew first — other modules depend on brew paths
-source "${DOTFILES_ZSH_PATH}/settings/homebrew.zsh"
+# OH MY ZSH
+source $ZSH/oh-my-zsh.sh
 
 # Source all settings modules
 for f in "${DOTFILES_ZSH_PATH}"/settings/*.zsh; do
@@ -42,6 +52,8 @@ for f in "${DOTFILES_ZSH_PATH}"/settings/*.zsh; do
 	[[ "$(basename "$f")" == "homebrew.zsh" ]] && continue
 	source "$f"
 done
+
+export PATH="$PATH:/Users/sherman/Library/Android/sdk/platform-tools"
 
 # Source all alias/tool modules
 for f in "${DOTFILES_ZSH_PATH}"/aliases/*.zsh; do
@@ -54,6 +66,12 @@ export PATH="$PATH:$HOME/.dual-graph"
 
 # Added by get-aspire-cli.sh
 export PATH="$HOME/.aspire/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/sherman/.lmstudio/bin"
+# End of LM Studio CLI section
+
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

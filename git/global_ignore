@@ -7,7 +7,7 @@
 
 # Claude
 .claude/
-docs/superpowers
+superpowers
 
 # Cursor
 .cursorrules

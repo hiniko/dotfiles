@@ -3,3 +3,7 @@
 *.bk
 
 nvim/plugin_hash.txt
+
+zsh/keys
+
+
