@@ -1,62 +1,47 @@
-local lsp = require("lsp-zero")
+-- Native LSP setup for nvim 0.11+ (vim.lsp.config / vim.lsp.enable).
+-- mason installs the servers; mason-lspconfig auto-enables them.
 
-lsp.preset("recommended")
-
-lsp.ensure_installed({
-	-- "tsserver",
-	"eslint",
-	"gopls",
-	"lua_ls"
+require('mason').setup()
+require('mason-lspconfig').setup({
+	ensure_installed = {
+		-- "ts_ls",
+		"eslint",
+		"gopls",
+		"lua_ls",
+	},
+	-- After vim.lsp.config below, auto-enable every installed server.
+	automatic_enable = true,
 })
 
-lsp.on_attach(function(_, bufnr)
-	-- see :help lsp-zero-keybindings
-	-- to learn the available actions
-	lsp.default_keymaps({ buffer = bufnr })
-end)
-
-lsp.setup()
-
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-
--- Lua LSP Setup (to remove global vim warning)
-
-require('lspconfig').lua_ls.setup({
-  capabilities = lsp_capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT'
-      },
-      diagnostics = {
-        globals = {'vim'},
-      },
-      workspace = {
-        library = {
-          vim.env.VIMRUNTIME,
-        }
-      }
-    }
-  }
+-- Advertise nvim-cmp's completion capabilities to every server.
+vim.lsp.config('*', {
+	capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
 
+-- lua_ls: teach it the `vim` global and the runtime files so editing this
+-- config doesn't throw "undefined global vim" warnings everywhere.
+vim.lsp.config('lua_ls', {
+	settings = {
+		Lua = {
+			runtime = { version = 'LuaJIT' },
+			diagnostics = { globals = { 'vim' } },
+			workspace = { library = { vim.env.VIMRUNTIME } },
+		},
+	},
+})
 
--- Autocomplete Setup
-
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-
-cmp.setup({
-	mapping = {
-		-- `Enter` key to confirm completion
-		['<CR>'] = cmp.mapping.confirm({ select = false }),
-
-		-- Ctrl+Space to trigger completion menu
-		['<C-Space>'] = cmp.mapping.complete(),
-
-		-- Navigate between snippet placeholder
-		['<C-f>'] = cmp_action.luasnip_jump_forward(),
-		['<C-b>'] = cmp_action.luasnip_jump_backward(),
-	}
+-- LSP keymaps, attached per-buffer when a server connects.
+vim.api.nvim_create_autocmd('LspAttach', {
+	callback = function(event)
+		local opts = { buffer = event.buf }
+		vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+		vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+		vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+		vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+		vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+		vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+		vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+		vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)
+		vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)
+	end,
 })

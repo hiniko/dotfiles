@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# Hunt for any commit/stash/dangling object that touched a given file path.
+# Searches: reflog, all stashes, all branches/tags, AND unreachable (dangling)
+# commits found via fsck — which is where truly "lost" work usually hides.
+#
+# Usage: ./find-lost-file.sh <path-fragment> [more-fragments...]
+#   Path fragments are matched against changed file paths (grep -F, OR'd).
+#
+# Example:
+#   ./find-lost-file.sh IProductCapabilityService.cs ProductCapability
+
+set -uo pipefail
+
+if [[ $# -lt 1 ]]; then
+  echo "usage: $0 <path-fragment> [more-fragments...]" >&2
+  exit 1
+fi
+
+# Build a grep -e a -e b ... pattern set from the fragments.
+PATTERNS=()
+for frag in "$@"; do
+  PATTERNS+=(-e "$frag")
+done
+
+# Print a commit if any of its changed files match the patterns.
+# $1 = commit-ish, $2 = source label (e.g. "reflog", "fsck-dangling")
+check_commit() {
+  local rev="$1" src="$2"
+  local files
+  files=$(git diff-tree --no-commit-id --name-only -r "$rev" 2>/dev/null) || return
+  local hit
+  hit=$(printf '%s\n' "$files" | grep -iF "${PATTERNS[@]}") || return
+  echo "════════════════════════════════════════════════════════════"
+  echo "MATCH in $src : $rev"
+  git log -1 --format='  %h  %ci  %an%n  %s' "$rev" 2>/dev/null
+  echo "  matched files:"
+  printf '    %s\n' $hit
+  echo
+}
+
+echo "### 1. Reflog (HEAD movements + all ref reflogs) ###"
+# All reflog entries across every ref, not just HEAD.
+git reflog --all --format='%H' 2>/dev/null | sort -u | while read -r sha; do
+  [[ -n "$sha" ]] && check_commit "$sha" "reflog"
+done
+
+echo "### 2. Stashes ###"
+git stash list --format='%H %gd' 2>/dev/null | while read -r sha name; do
+  [[ -z "$sha" ]] && continue
+  # A stash is a merge commit; diff against its first parent to see its content.
+  files=$(git diff-tree --no-commit-id --name-only -r "$sha^1" "$sha" 2>/dev/null)
+  hit=$(printf '%s\n' "$files" | grep -iF "${PATTERNS[@]}") || continue
+  echo "════════════════════════════════════════════════════════════"
+  echo "MATCH in stash $name : $sha"
+  git log -1 --format='  %h  %ci  %s' "$sha"
+  echo "  matched files:"
+  printf '    %s\n' $hit
+  echo
+done
+
+echo "### 3. All branches & tags containing the file in history ###"
+# Walk full history of every ref; report commits whose diff touched the file.
+git log --all --format='%H' 2>/dev/null | while read -r sha; do
+  check_commit "$sha" "branch/tag history"
+done
+
+echo "### 4. Dangling / unreachable commits (the real 'lost' zone) ###"
+# fsck finds objects not reachable from any ref — orphaned commits from
+# resets, rebases, deleted branches, expired reflog, etc.
+git fsck --no-reflogs --unreachable --no-progress 2>/dev/null \
+  | awk '$2=="commit"{print $3}' | while read -r sha; do
+  check_commit "$sha" "fsck-dangling"
+done
+
+echo "### Done. If nothing matched, try a shorter/different fragment. ###"

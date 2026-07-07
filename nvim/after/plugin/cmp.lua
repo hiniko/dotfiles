@@ -1,8 +1,13 @@
 local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-
+local luasnip = require('luasnip')
 
 cmp.setup({
+	snippet = {
+		expand = function(args) luasnip.lsp_expand(args.body) end,
+	},
+	sources = {
+		{ name = 'nvim_lsp' },
+	},
 	window = {
 		completion = cmp.config.window.bordered(),
 		documentation = cmp.config.window.bordered(),
@@ -16,8 +21,8 @@ cmp.setup({
 		['<C-j>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
 		['<C-k>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
 
-		-- Navigate between snippet placeholder
-		['<C-f>'] = cmp_action.luasnip_jump_forward(),
-		['<C-b>'] = cmp_action.luasnip_jump_backward(),
-	}
+		-- Navigate between snippet placeholders
+		['<C-f>'] = cmp.mapping(function() if luasnip.jumpable(1) then luasnip.jump(1) end end, { 'i', 's' }),
+		['<C-b>'] = cmp.mapping(function() if luasnip.jumpable(-1) then luasnip.jump(-1) end end, { 'i', 's' }),
+	},
 })

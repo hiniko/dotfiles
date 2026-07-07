@@ -102,22 +102,15 @@ return require('packer').startup(function(use)
 	-- fugitive - Git
 	use "tpope/vim-fugitive"
 
-	-- Zero-LSP - Managed language server setup
-	use {
-		'VonHeikemen/lsp-zero.nvim',
-		branch = 'v2.x',
-		requires = {
-			-- LSP Support
-			{ 'neovim/nvim-lspconfig' }, -- Required
-			{ 'williamboman/mason.nvim' }, -- Optional
-			{ 'williamboman/mason-lspconfig.nvim' }, -- Optional
+	-- LSP: native vim.lsp.config (nvim 0.11+), servers installed via mason.
+	use 'neovim/nvim-lspconfig'
+	use 'williamboman/mason.nvim'
+	use 'williamboman/mason-lspconfig.nvim'
 
-			-- Autocompletion
-			{ 'hrsh7th/nvim-cmp' }, -- Required
-			{ 'hrsh7th/cmp-nvim-lsp' }, -- Required
-			{ 'L3MON4D3/LuaSnip' }, -- Required
-		}
-	}
+	-- Autocompletion
+	use 'hrsh7th/nvim-cmp'
+	use 'hrsh7th/cmp-nvim-lsp'
+	use 'L3MON4D3/LuaSnip'
 
 	-- Comment Commenting support
 	use {
@@ -126,9 +119,6 @@ return require('packer').startup(function(use)
 			require('Comment').setup()
 		end
 	}
-
-	-- Github Copilot
-	use("github/copilot.vim")
 
 	-- Bufferline - Fancy bugger managmeent (tabs)
 	use { 'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons' }
@@ -147,7 +137,6 @@ return require('packer').startup(function(use)
 	-- Golang tooling https://github.com/ray-x/go.nvim	
 	use 'ray-x/go.nvim'
 	use 'ray-x/guihua.lua' -- recommended if need floating window support
-	use 'neovim/nvim-lspconfig'
 	-- already have this
 	-- use 'nvim-treesitter/nvim-treesitter'
 	use  'mfussenegger/nvim-dap'
