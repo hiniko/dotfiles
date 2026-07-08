@@ -14,7 +14,7 @@
 set -euo pipefail
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-SRC="${DIR}/.claude"          # tracked source tree
+SRC="${DIR}/claude"           # tracked source tree (no dot: .claude is globally gitignored)
 DEST="${HOME}/.claude"        # live config dir (a REAL dir, never a symlink)
 
 [ -d "$SRC" ] || { echo "No source tree at $SRC" >&2; exit 1; }
