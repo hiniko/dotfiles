@@ -155,7 +155,7 @@
     "ask": [],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5",
+  "model": "opus[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -195,7 +195,8 @@
     "superpowers@claude-plugins-official": true,
     "caveman@caveman": false,
     "skill-creator@claude-plugins-official": true,
-    "ponytail@ponytail": true
+    "ponytail@ponytail": true,
+    "datadog@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "caveman": {
@@ -213,13 +214,15 @@
   },
   "alwaysThinkingEnabled": false,
   "effortLevel": "high",
+  "askUserQuestionTimeout": "never",
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
   "editorMode": "vim",
-  "agentPushNotifEnabled": true,
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": false,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
